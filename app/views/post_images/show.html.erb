@@ -9,5 +9,44 @@
   <% if @post_image.user == current_user %>
     <%= link_to "削除", post_image_path(@post_image), method: :delete %>
   <% end %>
+  
+  <!-- 投稿画像に付けられた「いいね」に、自分（ログインしているユーザ）が含まれているかをfavorited_by?メソッドで判定している -->
+  <% if @post_image.favorited_by?(current_user) %>
+    <p>
+      <!-- 含まれるとき -->
+      <%= link_to post_image_favorites_path(@post_image), method: :delete do %>
+        ♥<%= @post_image.favorites.count %> いいね
+      <% end %>
+    </p>
+    <% else %>
+    <p>
+      <!-- 含まれないとき -->
+      <%= link_to post_image_favorites_path(@post_image), method: :post do %>
+        ♡<%= @post_image.favorites.count %> いいね
+      <% end %>
+    </p>
+  <% end %>
+
+  <div>
+  <p>コメント件数：<%= @post_image.post_comments.count %></p>
+  <% @post_image.post_comments.each do |post_comment| %>
+    <p><%= image_tag('sample-author1.jpg') %></p>
+    <%= post_comment.user.name %>
+    <%= post_comment.created_at.strftime('%Y/%m/%d') %><%= post_comment.comment %>
+  <!-- もし、コメントした人がログインユーザーだったら、削除ボタンを表示して、削除できるようする -->
+  <% if post_comment.user == current_user %>
+  <div>
+    <!-- post_image_post_comment_pathで投稿詳細画面に行く -->
+    <%= link_to "削除", post_image_post_comment_path(post_comment.post_image, post_comment), method: :delete %>
+  </div>
+  <% end %>
+  <% end %>
+  </div>
+  <div>
+  <%= form_with(model:[@post_image, @post_comment], local: true) do |f| %>
+    <%= f.text_area :comment, rows:'5',placeholder: "コメントをここに" %>
+    <%= f.submit "送信する" %>
+  <% end %>
+  </div>
 
 </div>
