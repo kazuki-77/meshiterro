@@ -1,0 +1,14 @@
+<% post_images.each do |post_image| %>  <!-- コピーして貼り付けた部分の変更@post_images → post_images -->
+<div>
+  <%= link_to post_image_path(post_image.id) do %>
+    <%= attachment_image_tag post_image, :image %>
+  <% end %>
+  <p>投稿ユーザー画像：<%= attachment_image_tag post_image.user, :profile_image, :fill, 60, 60, fallback: "no_image.jpg" %></p>
+  <!-- サイズ指定で画像が表示されない場合は、:fillによるサイズ指定ではなく、size:で指定してください。-->
+  <!-- この際、×（かける）ではなく、x（小文字のエックス）になります -->
+  <p>ショップ名：<%= post_image.shop_name %></p>
+  <p>説明：<%= post_image.caption %></p>
+  <p>ユーザーネーム：<%= post_image.user.name %></p>
+</div>
+<% end %>
+<%= paginate post_images %>  <!-- コピーして貼り付けた部分の変更 @post_images → post_images -->
