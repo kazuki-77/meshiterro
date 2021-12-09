@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+# resourcesの設定と重複を避けるために既存のget 'users/show' のルーティングを削除する。
  root to: 'homes#top'
  devise_for :users
  resources :post_images, only: [:new, :create, :index, :show, :destroy] do
@@ -9,6 +10,7 @@ Rails.application.routes.draw do
 
   resources :post_comments, only: [:create, :destroy]
  end
-
+ # 以下の行のonly: []内にedit,updateを追加
+ resources :users, only: [:show, :edit, :update]
 
 end

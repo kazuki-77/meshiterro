@@ -1,0 +1,25 @@
+<!-- ここから -->
+<div>
+  <h3><%= @user.name %></h3>
+  <%= attachment_image_tag @user, :profile_image, :fill, 100, 100, format: 'jpeg', fallback: "no_image.jpg" %>
+  <% if @user.id == current_user.id %> <!-- 自分（ログインしているユーザ）のマイページが表示されたときのみ -->
+    <p><%= link_to "プロフィール編集", edit_user_path(@user) %></p><!-- 編集ページへのリンクが表示されるように設定 -->
+  <% end %>
+
+</div>
+<!-- ここまでを追加 -->
+
+<% @post_images.each do |post_image| %>
+<div>
+  <%= link_to post_image_path(post_image.id) do %>
+    <%= attachment_image_tag post_image, :image %>
+  <% end %>
+  <p>投稿ユーザー画像：<%= attachment_image_tag post_image.user, :profile_image, :fill, 60, 60, fallback: "no_image.jpg" %></p>
+  <!-- サイズ指定で画像が表示されない場合は、:fillによるサイズ指定ではなく、size:で指定してください。-->
+  <!-- この際、×（かける）ではなく、x（小文字のエックス）になります -->
+  <p>ショップ名：<%= post_image.shop_name %></p>
+  <p>説明：<%= post_image.caption %></p>
+  <p>ユーザーネーム：<%= post_image.user.name %></p>
+</div>
+<% end %>
+<%= paginate @post_images %>
